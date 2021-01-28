@@ -9,3 +9,4 @@ modules/aks/variables.tf
 terraform.tfstate.*.backup
 .terraform.lock.hcl
 .terraform*
+certs/*
