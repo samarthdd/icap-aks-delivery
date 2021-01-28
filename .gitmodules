@@ -1,0 +1,3 @@
+[submodule "charts/icap-infrastructure"]
+	path = charts/icap-infrastructure
+	url = https://github.com/filetrust/icap-infrastructure
