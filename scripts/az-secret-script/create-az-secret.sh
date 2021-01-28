@@ -17,9 +17,9 @@ MANAGEMENT_ENDPOINT=$(az keyvault secret show --name manage-endpoint --vault-nam
 DOCKER_USERNAME=$(az keyvault secret show --name DH-SA-USERNAME --vault-name gw-tfstate-Vault --query value -o tsv)
 DOCKER_PASSWORD=$(az keyvault secret show --name DH-SA-PASSWORD --vault-name gw-tfstate-Vault --query value -o tsv)
 TOKEN_USERNAME=$(az keyvault secret show --name token-username --vault-name gw-tfstate-Vault --query value -o tsv)
-TOKEN_PASSWORD=$(tr -dc 'A-Za-z0-9!' </dev/urandom | head -c 20  ; echo)
-TOKEN_SECRET=$(tr -dc 'A-Za-z0-9!' </dev/urandom | head -c 30  ; echo)
-ENCRYPTION_SECRET=$(tr -dc 'A-Za-z0-9!' </dev/urandom | head -c 32  ; echo)
+TOKEN_PASSWORD=$(head /dev/urandom | base64 | head -c32)
+TOKEN_SECRET=$(head /dev/urandom | base64 | head -c32)
+ENCRYPTION_SECRET=$(head /dev/urandom | base64 | head -c32)
 
 # AZ Command to set Secrets
 az keyvault secret set --vault-name $UKW_VAULT --name $SECRET_NAME01 --value $DOCKER_USERNAME
