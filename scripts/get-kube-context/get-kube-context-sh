@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# AKS Variables
+UKW_RESOURCE_GROUP="gw-icap-aks-delivery"
+UKW_AKS_NAME="gw-icap-aks-delivery-ukw"
+
+ARGO_RESOURCE_GROUP="gw-icap-aks-delivery-argocd"
+ARGO_AKS_NAME="gw-icap-aks-delivery-argocd"
+
+az aks get-credentials --resource-group $UKW_RESOURCE_GROUP --name $UKW_AKS_NAME
+
+az aks get-credentials --resource-group $ARGO_RESOURCE_GROUP --name $ARGO_AKS_NAME

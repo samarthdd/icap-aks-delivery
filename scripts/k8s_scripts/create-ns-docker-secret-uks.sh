@@ -2,9 +2,11 @@
 
 # This script will run create the neccesary namespaces and add the docker service account to the required namespace.
 
+kubectl config use-context gw-icap-aks-delivery-ukw
+
 # Naming Variables
 RESOURCE_GROUP="gw-icap-aks-delivery-storage"
-VAULT_NAME="aks-delivery-keyvault"
+VAULT_NAME="aks-delivery-keyvault-01"
 
 # Secret Variables
 DOCKER_SERVER="https://index.docker.io/v1/"
@@ -20,6 +22,12 @@ TRANSACTION_CSV=$(az storage account show-connection-string -g $RESOURCE_GROUP -
 ENCRYPTION_SECRET=$(az keyvault secret show --name encryption-secret --vault-name $VAULT_NAME --query value -o tsv)
 MANAGEMENT_ENDPOINT=$(az keyvault secret show --name manage-endpoint --vault-name $VAULT_NAME --query value -o tsv)
 
+SMTPHOST=$(az keyvault secret show --name SmtpHost --vault-name $VAULT_NAME --query value -o tsv)
+SMTPPORT=$(az keyvault secret show --name SmtpPort --vault-name $VAULT_NAME --query value -o tsv)
+SMTPUSER=$(az keyvault secret show --name SmtpUser --vault-name $VAULT_NAME --query value -o tsv)
+SMTPPASS=$(az keyvault secret show --name SmtpPass --vault-name $VAULT_NAME --query value -o tsv)
+SMTPSECURESOCKETOPTIONS=$(az keyvault secret show --name SmtpSecureSocketOptions --vault-name $VAULT_NAME --query value -o tsv)
+
 # Namspace Variables
 NAMESPACE01="icap-adaptation"
 NAMESPACE02="icap-prometheus-stack"
@@ -27,6 +35,7 @@ NAMESPACE03="icap-ncfs"
 NAMESPACE04="icap-administration"
 NAMESPACE05="icap-rabbit-operator"
 NAMESPACE06="icap-central-monitoring"
+NAMESPACE07="ingress-nginx"
 
 # Create namespaces for deployment
 kubectl create ns $NAMESPACE01
@@ -35,6 +44,7 @@ kubectl create ns $NAMESPACE03
 kubectl create ns $NAMESPACE04
 kubectl create ns $NAMESPACE05
 kubectl create ns $NAMESPACE06
+kubectl create ns $NAMESPACE07
 
 # Create secret for Docker Registry - this only needs to be added to the 'icap-adaptation' and 'icap-administration' namespaces
 kubectl create -n $NAMESPACE01 secret docker-registry regcred \
@@ -67,6 +77,13 @@ kubectl create -n $NAMESPACE01 secret generic transactionstoresecret --from-lite
 kubectl create -n $NAMESPACE01 secret generic transactionqueryservicesecret --from-literal=username=$TOKEN_USERNAME --from-literal=password=$TOKEN_PASSWORD
 
 # Create secret for file share - needs to be part of the 'icap-administration' namespace
+kubectl create -n $NAMESPACE04 secret generic smtpsecret \
+	--from-literal=SmtpHost=$SMTPHOST \
+	--from-literal=SmtpPort=$SMTPPORT \
+	--from-literal=SmtpUser=$SMTPUSER \
+	--from-literal=SmtpPass=$SMTPPASS \
+	--from-literal=SmtpSecureSocketOptions=$SMTPSECURESOCKETOPTIONS
+
 kubectl create -n $NAMESPACE04 secret generic policyupdateserviceref --from-literal=username=$TOKEN_USERNAME --from-literal=password=$TOKEN_PASSWORD 
 
 kubectl create -n $NAMESPACE04 secret generic userstoresecret --from-literal=azurestorageaccountname=$FILESHARE_ACCOUNT_NAME --from-literal=azurestorageaccountkey=$FILESHARE_KEY --from-literal=EncryptionSecret=$ENCRYPTION_SECRET

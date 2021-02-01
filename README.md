@@ -1,12 +1,10 @@
 # icap-aks-delivery
-# aks-deployment-icap
 
 Deployment for I-CAP Azure resources and AKS Deployment using Terraform
 
 ## Table of contents
 
 - [icap-aks-delivery](#icap-aks-delivery)
-- [aks-deployment-icap](#aks-deployment-icap)
   - [Table of contents](#table-of-contents)
   - [Terraform Deployment](#terraform-deployment)
     - [Add Terraform Backend key to environment](#add-terraform-backend-key-to-environment)
@@ -34,10 +32,6 @@ Deployment for I-CAP Azure resources and AKS Deployment using Terraform
       - [Add context for easy switching between clusters](#add-context-for-easy-switching-between-clusters)
 
 ## Terraform Deployment
-
-Clone the following repo from Github
-
-[AKS Deployment ICAP](https://github.com/filetrust/aks-deployment-icap)
 
 You will then need to run the following to initiate the submodules that contain the helm charts.
 

@@ -13,5 +13,5 @@ variable "resource_group" {
 variable "kv_name" {
   description = "The name of the key vault"
   type        = string
-  default     = "aks-delivery-keyvault"
+  default     = "aks-delivery-keyvault-01"
 }
