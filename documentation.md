@@ -1,5 +1,6 @@
 # Instructions
-## Pre requisites
+
+## 1. Pre requisites
 1. terraform 14.4
 2. kubectx
 3. kubectl
@@ -8,7 +9,7 @@
 6. Azure login and subsctiption, Service principal. 
 7. Argocd Setup
 
-## Installtion
+## 1.1 Installtion of pre-requisites
 ### Mac Os
 
 terraform 
@@ -32,7 +33,7 @@ argocd
 brew install argocd
 ```
 
-## Guide to install and using ArgoCD
+## 1.2 Guide to install and setup ArgoCD
 
 ArgoCD can be used through your CLI or a GUI - it is currently set up to manually sync new changes from the "main" branches of all the repos that contain the charts for each service.
 
@@ -181,9 +182,9 @@ argocd cluster add <context name>
 
 The above command installs a ServiceAccount (argocd-manager), into the kube-system namespace of that kubectl context, and binds the service account to an admin-level ClusterRole. Argo CD uses this service account token to perform its management tasks (i.e. deploy/monitoring).
 
-## Deployment
+## 2. Usage
 
-### Clone repo 
+### 2.1 Clone repo 
 
 ```
    git clone https://github.com/filetrust/icap-aks-delivery.git
@@ -191,7 +192,7 @@ The above command installs a ServiceAccount (argocd-manager), into the kube-syst
    git submodule update
 
 ```
-### Add Terraform Backend key to environmen
+### 2.2 Add Terraform Backend key to environment
 
 - Get the access to keyvault gw-tfstate-Vault  
 
@@ -211,6 +212,7 @@ export ARM_ACCESS_KEY=$(az keyvault secret show --name terraform-backend-key --v
 # now check to see if you can access it through variable
 echo $ARM_ACCESS_KEY
 ```
+### 2.3 File modifications
 
 - Currently below needs modifications
 
@@ -250,8 +252,8 @@ echo $ARM_ACCESS_KEY
     UKW_RESOURCE_GROUP -  resource_group of aks
     UKW_CONTEXT - cluster_name of aks
     ```
-
-### Setup and initialise Terraform
+## 3. Deployment
+### 3.1 Setup and initialise Terraform
 - Next you'll need to use the following:
 
 ``` 
@@ -286,7 +288,7 @@ Enter "yes"
 
 ```
 
-### Verify context
+### 3.2 Verify context
 
 (make sure to follow above argocd installtion steps)
 
@@ -329,13 +331,13 @@ argocd app list
 #it should be empty at this point
 ```
 
-### Copy keyvalt information from "gw-tfstate-Vault" to your keyvault
+### 3.3 Copy keyvalt secrets from "gw-tfstate-Vault" to your keyvault
 
 ```
 chmod +x ./scripts/az-secret-script/create-az-secret.sh 
 ./scripts/az-secret-script/create-az-secret.sh 
 ```
-### Create a self signed certificate.
+### 3.4 Create a self signed certificate.
 
 ```
 openssl req -newkey rsa:2048 -nodes -keyout tls.key -x509 -days 365 -out certificate.crt
@@ -350,13 +352,13 @@ cp certificate.crt certs/mgmt-cert/certificate.crt
 
 ```
 
-### Create namespaces in aks resource groups from https://github.com/filetrust/icap-infrastructure
+### 3.5 Create namespaces in aks resource groups from https://github.com/filetrust/icap-infrastructure
 ```
 chmod +x ./scripts/k8s_scripts/create-ns-docker-secret-uks.sh 
 ./scripts/k8s_scripts/create-ns-docker-secret-uks.sh 
 ```
 
-### How to deploy using ArgoCD
+### 3.6 How to deploy using ArgoCD
 
 ```
 chmod +x ./scripts/argocd-scripts/argocd-app-deloy.sh
@@ -364,9 +366,9 @@ chmod +x ./scripts/argocd-scripts/argocd-app-deloy.sh
 
 ```
 
-### Sync an ArgoCD app
+### 4. Sync an ArgoCD app
 
-#### From cli
+#### 4.1 Sync From cli
 - Get Repo information from 
 ```
 argocd app list
@@ -377,7 +379,7 @@ argocd app list
 argocd app sync <REPO>
 ```
 
-#### From UI
+#### 4.2 Sync From UI
 
 - Access argocd UI using argocd public <IP>
 ```
