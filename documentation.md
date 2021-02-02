@@ -242,7 +242,7 @@ echo $ARM_ACCESS_KEY
     - `scripts\k8s_scripts\create-ns-docker-secret-uks.sh`
     
     ```
-    RESOURCE_GROUP= resource group in keyvait
+    RESOURCE_GROUP= resource group in storage-account
     VAULT_NAME= kv_name default valu
     ```
     
