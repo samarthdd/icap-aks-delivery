@@ -1,5 +1,5 @@
 # Instructions
-##Pre requisites
+## Pre requisites
 1. terraform 14.4
 2. kubectx
 3. kubectl
@@ -7,7 +7,6 @@
 5. Microsoft account
 6. Azure login and subsctiption, Service principal. 
 7. Argocd Setup
-
 
 ## Installtion
 ### Mac Os
