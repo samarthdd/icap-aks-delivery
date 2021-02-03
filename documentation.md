@@ -392,3 +392,153 @@ kubectl get svc -n argocd argocd-server
 - You can do various function in argocd UI.
 
 
+# Deviations
+
+2.2.
+
+Firstly make sure you're logged in and using the correct subscription.
+
+```bash
+
+az login
+
+az account list --output table
+
+az account set -s <subscription ID>
+
+```
+
+Next please use the below script to create the following resources:
+
+vim ./scripts/set_env_varibales.sh
+
+Copy Paste below lines and fill proper values.
+```
+#!/bin/bash
+
+LOCATION=
+RESOURCE_GROUP_NAME=
+STORAGE_ACCOUNT_NAME=
+CONTAINER_NAME=
+TAGS='createdby='
+VAULT_NAME=
+
+```
+
+```
+#!/bin/bash
+# Script adapted from https://docs.microsoft.com/en-us/azure/terraform/terraform-backend.
+# We cannot create this storage account and blob container using Terraform itself since
+# we are creating the remote state storage for Terraform and Terraform needs this storage in terraform init phase.
+
+# Create resource group
+az group create --name $RESOURCE_GROUP_NAME --location $LOCATION --tags $TAGS
+
+# Create storage account
+az storage account create --resource-group $RESOURCE_GROUP_NAME --name $STORAGE_ACCOUNT_NAME --sku Standard_LRS --encryption-services blob --tags $TAGS
+
+# Get storage account key
+ACCOUNT_KEY=$(az storage account keys list --resource-group $RESOURCE_GROUP_NAME --account-name $STORAGE_ACCOUNT_NAME --query [0].value -o tsv)
+
+# Create blob container
+az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME --account-key $ACCOUNT_KEY
+
+az keyvault create --name $VAULT_NAME --resource-group $RESOURCE_GROUP_NAME --location $LOCATION
+
+az keyvault secret set --vault-name $VAULT_NAME --name “terraform-backend-key” --value ACCOUNT_KEY
+
+echo "storage_account_name:$RESOURCE_GROUP_NAME"
+echo "storage_account_name: $STORAGE_ACCOUNT_NAME"
+echo "container_name: $CONTAINER_NAME"
+echo "access_key: $ACCOUNT_KEY"
+echo "keyVault": $VAULT_NAME
+
+```
+## Create terraform service principle
+
+*PLEASE NOTE THIS ONLY NEEDS TO BE DONE ONCE FOR A SINGLE SUBSCRIPTION*
+
+This next part will create a service principle, with the least amount of privileges, to perform the AKS Deployment.
+
+The script below will perform the following:
+
+- Create the service principal (or resets the credentials if it already exists)
+
+- Prompts to choose either a populated or empty provider.tf azurerm provider block
+
+- Exports the environment variables if you selected an empty block (and display the commands)
+
+- Display the az login command to log in as the service principal
+
+
+```
+
+chmod +x ./scripts/terraform-scripts/create_azure_setup.sh
+./scripts/terraform-scripts/create_azure_setup.sh
+
+```
+
+- When prompted `The provider.tf file exists.  Do you want to overwrite? ` , Enter `Y`
+
+- When prompted
+
+```
+Will now create a provider.tf file.  Choose output type.
+1) Populated azurerm block
+2) Empty azurerm block with environment variables
+3) Quit
+Choose provider block type: 
+```
+
+`Choose 2`
+
+- The output will be similar to this:
+
+```
+{
+"appId": "xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz",
+"displayName":"terraform-xyzxyzxyzxyzxyzxyzxyzxyzxyzx",
+"name": "http://terraform-xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz",
+"password": "xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz",
+"tenant": "xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz"
+}
+Copy the following environment variable exports and paste into your .bashrc file:
+
+export ARM_SUBSCRIPTION_ID="xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz"
+export ARM_CLIENT_ID="xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz"
+export ARM_CLIENT_SECRET="xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz"
+export ARM_TENANT_ID="xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz"
+
+```
+
+Using above output, run below commands
+
+```
+az keyvault secret set --vault-name $KEY_VAULT_NAME --name spusername --value <ClientID>
+
+az keyvault secret set --vault-name $KEY_VAULT_NAME --name sppassword --value <Client-Secret>
+
+az keyvault secret set --vault-name $KEY_VAULT_NAME --name "TF-VAR-client-id" --value <ClientID>
+
+az keyvault secret set --vault-name $KEY_VAULT_NAME  --name "TF-VAR-client-secret" --value <Client-Secret>
+
+```
+- You need to login to azure account and  search <KEY_VAULT_NAME>,Go to secrets and add below secrets.
+
+```
+
+DH-SA-USERNAME - Dockerhub username ( Get from GW team )
+DH-SA-PASSWORD - Dockerhub password ( Get from GW team )
+token-username - policy-management
+SmtpUser - ( Get from GW team )
+SmtpPass - ( Get from GW team )
+manage-endpoint -  ( Get from GW team )
+
+```
+
+
+
+
+
+
+
