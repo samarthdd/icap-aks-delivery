@@ -7,60 +7,34 @@ Deployment for I-CAP Azure resources and AKS Deployment using Terraform
 - [icap-aks-delivery](#icap-aks-delivery)
   - [Table of contents](#table-of-contents)
   - [Terraform Deployment](#terraform-deployment)
-    - [Add Terraform Backend key to environment](#add-terraform-backend-key-to-environment)
+    - [Logging into Azure CLI](#logging-into-azure-cli)
     - [Setup and initialise Terraform](#setup-and-initialise-terraform)
-    - [Deploy services](#deploy-services)
-    - [Attaching ACRs to cluster](#attaching-acrs-to-cluster)
-    - [Guide to install and using ArgoCD](#guide-to-install-and-using-argocd)
-    - [Install ArgoCD](#install-argocd)
-    - [Install ArgoCD CLI tool](#install-argocd-cli-tool)
-      - [Linux](#linux)
-      - [Mac](#mac)
-      - [Windows](#windows)
-    - [Accessing the Argo CD API Server](#accessing-the-argo-cd-api-server)
-    - [Login using CLI or GUI](#login-using-cli-or-gui)
-      - [CLI Login](#cli-login)
-      - [GUI Login](#gui-login)
-    - [Register a Cluster to Deploy apps to](#register-a-cluster-to-deploy-apps-to)
-    - [How to deploy using ArgoCD](#how-to-deploy-using-argocd)
-    - [Check status of ArgoCD apps](#check-status-of-argocd-apps)
-      - [Sync an ArgoCD app](#sync-an-argocd-app)
-    - [Commands to deploy all services using ArgoCD](#commands-to-deploy-all-services-using-argocd)
-    - [ArgoCD Cheat Sheet](#argocd-cheat-sheet)
-      - [Sync sing and multiple apps](#sync-sing-and-multiple-apps)
-      - [Delete single & all apps](#delete-single--all-apps)
-      - [Add context for easy switching between clusters](#add-context-for-easy-switching-between-clusters)
+    - [Loading Secrets into key vault](#loading-secrets-into-key-vault)
+    - [Get contexts for the clusters](#get-contexts-for-the-clusters)
+    - [Creating SSL Certs](#creating-ssl-certs)
+    - [Create Namespaces & Secrets](#create-namespaces--secrets)
+    - [Install ArgoCD & Deploy Apps using ArgoCD](#install-argocd--deploy-apps-using-argocd)
 
 ## Terraform Deployment
 
-You will then need to run the following to initiate the submodules that contain the helm charts.
-
-```
-git submodule init
-git submodule update
-```
-
 Once you've cloned down the repo you will need to run the following.
 
-### Add Terraform Backend key to environment
+### Logging into Azure CLI
 
-Follow the below commands to get the backend key for Terraform from the Azure Keyvault
-az aks get-credentials --resource-group gw-icap-aks-deploy --name gw-icap-ak
-Verify you have access to the backend vault 
+For Terraform to use your subscription to deploy to, you will need to log into the Azure CLI:
 
+```bash
+az login
+
+# This will take you to your browser, follow the steps and when you return to the cli it will log you in and output the subscriptions you have access to
 ```
-az keyvault secret show --name terraform-backend-key --vault-name gw-tfstate-Vault --query value -o tsv
+
+You will also need to make sure you're using the correct subscription, oncey you've logged in.
+
+```bash
+az account set --subscription <subscription ID>
 ```
-
-Next export the environment variable "ARM_ACCESS_KEY" to be able to initialise terraform
-
-```
-export ARM_ACCESS_KEY=$(az keyvault secret show --name terraform-backend-key --vault-name gw-tfstate-Vault --query value -o tsv)
-
-# now check to see if you can access it through variable
-
-echo $ARM_ACCESS_KEY
-```
+Once logged in and using the correct subscription terraform will take care of the rest by using the Azurerm provider.
 
 ### Setup and initialise Terraform
 
@@ -79,7 +53,7 @@ Success! The configuration is valid.
 terraform refresh
 ```
 
-Now you're ready to run apply and it should give you the following output
+Now you're ready to run apply and it should give you the following output and you need to enter "yes"
 
 ```
 terraform apply
@@ -90,290 +64,75 @@ Do you want to perform these actions?
   Terraform will perform the actions described above.
   Only 'yes' will be accepted to approve.
 
-  Enter a value:
+  Enter a value: yes
 ```
 
 Once this completes you should see all the infrastructure for the AKS deployed and working.
 
-### Deploy services
+### Loading Secrets into key vault
+
+This step requires you to run a script to load the secrest needed for the K8 services into the newly deployed key vault. 
+
+All this requires is for you to make sure that the variable with the key vault name, matches the name of the key vault you just deployed.
+
+Then you run the following script:
+
+```bash
+./scripts/az-secret-script/create-az-secret.sh
+```
+
+### Get contexts for the clusters
+
+Before running the script you will need to create certificates for the Management UI and the ICAP-Client. Follow the commands below to do this:
+
+The following script will allow you to get the contexts for the two clusters you've just deployed. 
+
+All this requires is to make sure the variable with the cluster names, matches the name of the clusters you just deployed.
+
+```bash
+./scripts/get-kube-context/get-kube-context.sh
+```
+
+### Creating SSL Certs
+
+Firstly you will need to create a ```certs/``` folder:
+
+```bash
+mkdir certs/ 
+
+mkdir certs/icap-cert
+
+mkdir certs/mgmt-cert
+```
+
+Now the directories for the certs have been created, you can now create the certs using the following scripts:
+
+ICAP-Client
+```bash
+./scripts/gen-certs/icap-cert/icap-gen-certs.sh icap-client.ukwest.cloudapp.azure.com
+```
+
+Management-UI
+```bash
+./scripts/gen-certs/mgmt-cert/mgmt-gen-certs.sh managemen-ui.ukwest.cloudapp.azure.com
+```
+
+### Create Namespaces & Secrets
+
+This next step will create the namespaces on the cluster and load the secrets on the cluster as well.
+
+All this requires is to make sure the variables at the top of the script matches the names of the clusters and resource groups you just deployed.
+
+```bash
+./scripts/k8_scripts/create-ns-docker-secret-ukw.sh
+```
+
+### Install ArgoCD & Deploy Apps using ArgoCD
 
 Next we will deploy the services using either Helm or Argocd. Both of the Readme's for each can be found below:
 
-[ArgoCD Readme](/argocd/README.md)
+[ArgoCD Installation guide Readme](/argocd/installation-guide/README.md)
+[ArgoCD deployment guide Readme](/argocd/deployment-guide/README.md)
+[ArgoCD user guide Readme](/argocd/user-guide/README.md)
 
 ***All commands need to be run from the root directory for the paths to be correct***
-
-### Attaching ACRs to cluster
-
-The blow command can be run multiple times to attach ACRs to the working cluster. This is mainly for development purposes as there are various pipelines setup with images being sent to multiple different clusters. In theory as the final product/project is nearing the end we should have a single source of truth for all images.
-
-```bash
-az aks update -n myAKSCluster -g myResourceGroup --attach-acr acr1
-az aks update -n myAKSCluster -g myResourceGroup --attach-acr acr2
-```
-
-### Guide to install and using ArgoCD
-
-ArgoCD can be used through your CLI or a GUI - it is currently set up to manually sync new changes from the "main" branches of all the repos that contain the charts for each service. 
-
-The future aim would be to have a "staging" environment and a "production" environment. Changes would be automatically deployed to "staging" as this would be a mirror copy of "production" - then if all was well with the upgrade on "staging" then we merge the changes to "main" branch, which is turn upgrades that cluster automatically too.
-
-ArgoCD is very easy to install and set up - if you want to get it working on your current machine, follow the details below. 
-
-### Install ArgoCD
-
-Installation of ArgoCD only needs to be done on a fresh cluster - this does not apply to any current clusters running ArgoCD already.
-
-Requirements
-
-- Installed kubectl cli tool
-- Have kubeconfig files set up (default location is ~/.kube/config)
-
-The config is easily populated using a command like below:
-
-```bash
-az aks get-credentials --name <cluster name> --resource-group <cluster resource group>
-```
-
-Next to install the required services you would use the following commands:
-
-```bash
-kubectl create namespace argocd
-
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-```
-
-This creates the namespace "argocd" and installs all the relevant services for the Argo server to run.
-
-### Install ArgoCD CLI tool
-
-You can interact with ArgoCD through the CLI or the gui. To install the cli tool, follow the below instructions:
-
-#### Linux
-
-Set up an environment variable to assign the most recent version number
-
-```bash
-VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
-```
-
-Next use curl to download the most recent Linux version:
-
-```bash
-curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64
-```
-
-Lastly make the argocld CLI executable:
-
-```bash
-chmod +x /usr/local/bin/argocd
-```
-#### Mac
-
-Use homebrew to install:
-
-```bash
-brew install argocd
-```
-
-#### Windows
-
-Download With Powershell: Invoke-WebRequest¶
-You can view the latest version of Argo CD at the link above or run the following command to grab the version:
-
-```powershell
-$version = (Invoke-RestMethod https://api.github.com/repos/argoproj/argo-cd/releases/latest).tag_name
-Replace $version in the command below with the version of Argo CD you would like to download:
-```
-
-```powershell
-$url = "https://github.com/argoproj/argo-cd/releases/download/" + $version + "/argocd-windows-amd64.exe"
-$output = "argocd.exe"
-
-Invoke-WebRequest -Uri $url -OutFile $output
-```
-Also please note you will probably need to move the file into your PATH.
-
-After finishing the instructions above, you should now be able to run argocd commands
-
-### Accessing the Argo CD API Server
-
-In order to access the Argo CD API Server you use the following command to expose the external IP address. For future iterations of ArgoCD we can look to utilise SSO and SSL as extra layers of security. For now we are using basic http and manually adjusting passwords.
-
-So to access you would need to use following command to change the argo-server service type to "LoadBalancer":
-
-```bash
-kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
-```
-
-Now run the following to get the public IP:
-
-```bash
-kubectl get svc -n argocd argocd-server
-
-NAME            TYPE           CLUSTER-IP   EXTERNAL-IP    PORT(S)                      AGE
-argocd-server   LoadBalancer   x.x.x.xxx   xxx.xx.xxx.xx   80:32117/TCP,443:30284/TCP   4d1h
-```
-
-Then if you go to the public IP you will be met by the login screen for ArgoCD
-
-### Login using CLI or GUI
-
-#### CLI Login
-
-The password that is autogenerated to be the pod name of the Argo CD API Server. You can find this out with the following command:
-
-```bash
-kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
-```
-
-Using the username "admin" and the password above, login using the public IP of ArgoCD
-
-```bash
-argocd login <public IP>
-```
-
-Once logged in you will need to change the password
-
-```bash
-argocd account update-password
-```
-
-Once you're logged in you have full access to all the Argocd CLI commands and can deploy new charts or sync existing charts.
-
-#### GUI Login
-
-Pretty simple - go to the public IP and use the username "admin" and the password from the below command:
-
-```bash
-kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
-```
-
-### Register a Cluster to Deploy apps to
-
-This is required if you want to deploy to external clusters using ArgoCD. Follow the below to add clusters:
-
-```bash
-argocd cluster add
-```
-
-Choose a context name from the list and supply it to the following command:
-
-```bash
-argocd cluster add <context name>
-```
-
-The above command installs a ServiceAccount (argocd-manager), into the kube-system namespace of that kubectl context, and binds the service account to an admin-level ClusterRole. Argo CD uses this service account token to perform its management tasks (i.e. deploy/monitoring).
-
-### How to deploy using ArgoCD
-
-The next part will explain what you need to set up the deployment of the services. Once these are set they will remain in the apps list, where you can sync any new merges on the branch you have added.
-
-Now you have the cluster added you can get the cluster server address using the below command:
-
-```bash
-kubectl cluster-info
-Kubernetes master is running at https://gw-icap-k8s-f17703a9.hcp.uksouth.azmk8s.io:443
-CoreDNS is running at https://gw-icap-k8s-f17703a9.hcp.uksouth.azmk8s.io:443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
-Metrics-server is running at https://gw-icap-k8s-f17703a9.hcp.uksouth.azmk8s.io:443/api/v1/namespaces/kube-system/services/https:metrics-server:/proxy
-
-To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
-```
-
-The following command is pretty self explanatory but you can use "argocd app create --help" to see a full breakdown if needed:
-
-```bash
-argocd app create adaptation-service-main --repo https://github.com/filetrust/icap-infrastructure --path adaptation --dest-server https://gw-icap-k8s-f17703a9.hcp.uksouth.azmk8s.io:443 --dest-namespace icap-adaptation --revision main
-```
-
-The above will then appear in the argocd apps list and can be synced whenever the are new updates on that repo.
-
-### Check status of ArgoCD apps
-
-If you want to check the status of an ArgoCD app you would use the following:
-```bash
-argocd app list 
-
-NAME                        CLUSTER                                                 NAMESPACE              PROJECT  STATUS     HEALTH    SYNCPOLICY  CONDITIONS  REPO                                              PATH                   TARGET
-adaptation-service-main     https://gw-icap-k8s-f17703a9.hcp.uksouth.azmk8s.io:443  icap-adaptation        default  Synced     Healthy   <none>      <none>      https://github.com/filetrust/icap-infrastructure  adaptation             main
-management-ui-main          https://gw-icap-k8s-f17703a9.hcp.uksouth.azmk8s.io:443  management-ui          default  Synced     Healthy   <none>      <none>      https://github.com/filetrust/icap-infrastructure  management-ui          main
-policy-management-api-main  https://gw-icap-k8s-f17703a9.hcp.uksouth.azmk8s.io:443  icap-adaptation        default  Synced     Degraded  <none>      <none>      https://github.com/filetrust/icap-infrastructure  policy-management-api  main
-rabbitmq-main               https://gw-icap-k8s-f17703a9.hcp.uksouth.azmk8s.io:443  icap-adaptation        default  Synced     Healthy   <none>      <none>      https://github.com/filetrust/icap-infrastructure  rabbitmq               main
-transaction-event-api-main  https://gw-icap-k8s-f17703a9.hcp.uksouth.azmk8s.io:443  transaction-event-api  default  OutOfSync  Healthy   <none>      <none>      https://github.com/filetrust/icap-infrastructure  transactioneventapi    main
-```
-
-The status bar tells if you if its "synced" or "out of sync" and you can also see the health of the deployments as well.
-
-#### Sync an ArgoCD app
-
-When new features are added you can easily sync these to the current cluster by using the simple command below:
-
-```bash
-argocd app sync adaptation-service-main
-```
-
-This will sync the new changes that have been merged into the "main" branch of the "icap-infrastructure" repo. It will output any errors and give you a status of the app at completion.
-
-### Commands to deploy all services using ArgoCD
-
-Adaptation service
-```bash
-argocd app create adaptation-service-main --repo https://github.com/filetrust/icap-infrastructure --path adaptation --dest-server <cluster url> --dest-namespace icap-adaptation --revision main
-```
-
-Rabbitmq
-```bash
-argocd app create rabbitmq-service-main --repo https://github.com/filetrust/icap-infrastructure --path rabbitmq --dest-server <cluster url> --dest-namespace icap-adaptation --revision main
-```
-
-ICAP-Administration
-```bash
- argocd app create icap-administration-main --repo https://github.com/filetrust/icap-infrastructure --path administration --dest-server <cluster url> --dest-namespace icap-administration --revision main
- ```
-
-### ArgoCD Cheat Sheet
-
-#### Sync sing and multiple apps 
-
-Sync single apps
-```
-argodcd app sync <app service name>
-
-Sync all apps
-```bash
-argocd app list -o name | xargs argocd app sync
-```
-
-#### Delete single & all apps
-
-Delete a single app
-```
-argocd app sync
-```
-
-Delete all apps
-```
-argocd app list -o name | xargs argocd app sync
-```
-
-#### Add context for easy switching between clusters
-
-Firstly you will need to get the public IP address of the Argocd server
-
-```
-kubectl get svc -n argocd argocd-server
-```
-
-Then you can use the following command to login but it will also add it to the context as well
-
-```
-argocd login -n <name of cluster or context> <Argo Server IP or hostname>
-```
-Now when you run the following it will show output the contexts you can change too. 
-```
-argocd context
-CURRENT  NAME      SERVER
-         North-Eu  xxx.xxx.xxx.xxx
-         US-East   xxx.xxx.xxx.xxx
-*        UK-South  xxx.xxx.xxx.xxx
-```
