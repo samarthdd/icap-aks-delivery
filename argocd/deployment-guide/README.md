@@ -34,4 +34,4 @@ argocd app list
 
 ***TIP - you can use ```argocd app list -o name``` which will output only the names of the apps. Sometimes the full list of apps can get a bit busy***
 
-You're now ready to sync the apps onto the main ICAP cluster but before you do that make sure you've installed all the secrets onto the server, otherwise you will run into errors deploying.
+You're now ready to sync the apps onto the ICAP cluster but before you do that make sure you've installed all the secrets onto the server, otherwise you will run into errors deploying.

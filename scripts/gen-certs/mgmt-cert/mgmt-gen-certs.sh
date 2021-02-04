@@ -6,7 +6,7 @@ commonname=$domain
 
 #Change to your company details
 country=GB
-state=Londn
+state=London
 locality=London
 organization=glasswallsolutions.com
 organizationalunit=IT

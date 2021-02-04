@@ -11,7 +11,7 @@
 
 ### Install ArgoCD onto the cluster
 
-You will use helm to install ArgoCD, follow the commands below to get it installed.
+You will use Helm to install ArgoCD, follow the commands below to get it installed.
 
 Firstly make sure you're using the correct context, this will be the context of the cluster you want to deploy to:
 
@@ -43,7 +43,7 @@ Next use curl to download the most recent Linux version:
 curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64
 ```
 
-Lastly make the argocld CLI executable:
+Lastly make the argocd CLI executable:
 
 ```bash
 chmod +x /usr/local/bin/argocd

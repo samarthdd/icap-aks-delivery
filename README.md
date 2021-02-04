@@ -6,6 +6,7 @@ Deployment for I-CAP Azure resources and AKS Deployment using Terraform
 
 - [icap-aks-delivery](#icap-aks-delivery)
   - [Table of contents](#table-of-contents)
+  - [Pre-requisites](#pre-requisites)
   - [Terraform Deployment](#terraform-deployment)
     - [Logging into Azure CLI](#logging-into-azure-cli)
     - [Setup and initialise Terraform](#setup-and-initialise-terraform)
@@ -14,6 +15,17 @@ Deployment for I-CAP Azure resources and AKS Deployment using Terraform
     - [Creating SSL Certs](#creating-ssl-certs)
     - [Create Namespaces & Secrets](#create-namespaces--secrets)
     - [Install ArgoCD & Deploy Apps using ArgoCD](#install-argocd--deploy-apps-using-argocd)
+
+## Pre-requisites 
+
+In order to follow along with this guide you will need the following:
+
+- Helm
+- Terraform 
+- Kubectl
+- AZ CLI - with permissions to create resources within your chosen subscription
+- OpenSSL
+- Bash terminal or terminal able to execute bash scripts
 
 ## Terraform Deployment
 
