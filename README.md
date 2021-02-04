@@ -143,8 +143,8 @@ All this requires is to make sure the variables at the top of the script matches
 
 Next we will deploy the services using either Helm or Argocd. Both of the Readme's for each can be found below:
 
-[ArgoCD Installation guide Readme](/argocd/installation-guide/README.md)
-[ArgoCD deployment guide Readme](/argocd/deployment-guide/README.md)
-[ArgoCD user guide Readme](/argocd/user-guide/README.md)
+- [ArgoCD Installation guide Readme](/argocd/installation-guide/README.md)
+- [ArgoCD deployment guide Readme](/argocd/deployment-guide/README.md)
+- [ArgoCD user guide Readme](/argocd/user-guide/README.md)
 
 ***All commands need to be run from the root directory for the paths to be correct***
