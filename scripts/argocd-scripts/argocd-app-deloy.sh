@@ -59,6 +59,6 @@ argocd app create $PATH_NCFS-ukw-develop --repo $ICAP_REPO --path $PATH_NCFS --d
 
 argocd app create $CERT_MANAGER-ukw-develop --repo $ICAP_REPO --path $PATH_CERT --dest-server https://$UKW_CLUSTER_FQDN:443 --dest-namespace default --revision $REV_DEVELOP
 
-argocd app create $MONITORING_SERVICE-ukw-develop --repo $ICAP_REPO --path $PATH_PROMETHEUS --dest-server https://$UKW_CLUSTER_FQDN:443 --dest-namespace $NS_MONITORING --revision $REV_DEVELOP --parameter $PARAM_REMOVE_SECRETS
+argocd app create $MONITORING_SERVICE-ukw-develop --repo $ICAP_REPO --path $PATH_PROMETHEUS --dest-server https://$UKW_CLUSTER_FQDN:443 --dest-namespace $NS_MONITORING --revision $REV_DEVELOP
 
-argocd app create $MONITORING_SERVICE-grafana-ukw-develop --repo $ICAP_REPO --path $PATH_GRAFANA --dest-server https://$UKW_CLUSTER_FQDN:443 --dest-namespace $NS_MONITORING --revision $REV_DEVELOP --parameter $PARAM_REMOVE_SECRETS
+argocd app create $MONITORING_SERVICE-grafana-ukw-develop --repo $ICAP_REPO --path $PATH_GRAFANA --dest-server https://$UKW_CLUSTER_FQDN:443 --dest-namespace $NS_MONITORING --revision $REV_DEVELOP
