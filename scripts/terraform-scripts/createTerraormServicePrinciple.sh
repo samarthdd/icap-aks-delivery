@@ -15,7 +15,6 @@ error()
 yellow() { tput setaf 3; cat - ; tput sgr0; return; }
 cyan()   { tput setaf 6; cat - ; tput sgr0; return; }
 
-
 # Grab the Azure subscription ID
 subId=$(az account show --output tsv --query id)
 [[ -z "$subId" ]] && error "Not logged into Azure as expected."
@@ -56,8 +55,19 @@ clientId=$(jq -r .appId <<< $spout)
 clientSecret=$(jq -r .password <<< $spout)
 tenantId=$(jq -r .tenant <<< $spout)
 
+cat <<-END-OF-ENVVARS | cyan
+subscription_id = "$subId"
+client_id       = "$clientId"
+client_secret   = "$clientSecret"
+tenant_id       = "$tenantId"
+END-OF-ENVVARS
+
+exit 0
+
+:'
 echo -e "\nWill now create a provider.tf file.  Choose output type."
-PS3='Choose provider block type: '
+
+PS3="Choose provider block type: "
 options=("Populated azurerm block" "Empty azurerm block with environment variables" "Quit")
 select opt in "${options[@]}"
 do
@@ -83,13 +93,13 @@ do
       cat provider.tf | yellow
       echo >&2
 
-      export ARM_SUBSCRIPTION_ID="$subId"
-      export ARM_CLIENT_ID="$clientId"
-      export ARM_CLIENT_SECRET="$clientSecret"
-      export ARM_TENANT_ID="$tenantId"
+  export ARM_SUBSCRIPTION_ID="$subId"
+  export ARM_CLIENT_ID="$clientId"
+  export ARM_CLIENT_SECRET="$clientSecret"
+  export ARM_TENANT_ID="$tenantId"
 
-      echo "Copy the following environment variable exports and paste into your .bashrc file:"
-      cat <<-END-OF-ENVVARS | cyan
+  echo "Copy the following environment variable exports and paste into your .bashrc file:"
+  cat <<-END-OF-ENVVARS | cyan
 	export ARM_SUBSCRIPTION_ID="$subId"
 	export ARM_CLIENT_ID="$clientId"
 	export ARM_CLIENT_SECRET="$clientSecret"
@@ -106,5 +116,5 @@ done
 
 echo "To log in as the Service Principal then run the following command:"
 echo "az login --service-principal --username \"$clientId\" --password \"$clientSecret\" --tenant \"$tenantId\"" | cyan
+'
 
-exit 0
