@@ -596,7 +596,7 @@ RESPMOD HEADERS:
 #terraform destroy -auto-approve
 terraform destroy
 
-@deletes keyvault
+#deletes keyvault
 az keyvault delete --name $VAULT_NAME --resource-group $RESOURCE_GROUP_NAME
 
 #deletes container
