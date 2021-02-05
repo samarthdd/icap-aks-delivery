@@ -1,5 +1,3 @@
-# AKS-DEPLOYMENT-DOCUMENTATION
-
 # Instructions
 
 ## 1. Pre-requisites
@@ -61,30 +59,6 @@
             Terraform v0.14.3
     ```
  
-### Kubectx install
-**MacOS**
-
-Copy and paste the following command
-    ```
-    brew install kubectx
-    ```
-
-**Windows**
-
-To install kubectx in windows you will need Chocolatey (this link shows how to install it)
-after installation of chocolatey run
-
-    ```
-    choco install kubectx
-    ```
-**Linux**
-
-Copy and paste the following command
-
-    ```
-    sudo apt install kubectx
-    ```
- 
 ### Kubectl install
 **MacOS**
 
@@ -138,54 +112,6 @@ Copy and paste the following command
     kubectl version –client
     ```
  
-### ArgoCD CLI install
-
-- You can interact with ArgoCD through the CLI or the GUI. To install the cli tool, follow the below instructions
-
-**MacOS**
-
-- Copy and paste the following command
-
-    ```
-    brew install argocd
-    ```
- 
-**Windows**
-- Download With Powershell: Invoke-WebRequest. Run the following command to grab the version:
-
-    ```
-    $version = (Invoke-RestMethod https://api.github.com/repos/argoproj/argo-cd/releases/latest).tag_name
-    ```
- 
-- Replace $version in the command below with the version of Argo CD you would like to download:
-    ```
-    $url = "https://github.com/argoproj/argo-cd/releases/download/" + $version + "/argocd-windows-amd64.exe"
-    $output = "argocd.exe"
-    
-    ``` 
-- Invoke-WebRequest -Uri $url -OutFile $output
-- Also please note you will probably need to move the file into your PATH.
-- After finishing the instructions above, you should now be able to run argocd commands
- 
-**Linux**
-
-1. Set up an environment variable to assign the most recent version number
-
-    ```
-    VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
-    
-    ```
-2. Next use curl to download the most recent Linux version:
-
-    ```
-     curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64
-    ```
-
-3.   	Lastly make the argocld CLI executable:
-
-    ```
-    chmod +x /usr/local/bin/argocd
-    ```
 ### Open SSL 
 
 **MacOs**  
@@ -196,7 +122,13 @@ brew info openssl
 #check version
 openssl version -a
 ```
+**Windows**
 
+Follow the instructions [here](https://www.xolphin.com/support/OpenSSL/OpenSSL_-_Installation_under_Windows)
+
+**Linux**
+
+OpenSSL has been installed from source on Linux Ubuntu and CentOS
 ## 2. Usage
 
 ### 2.1 Clone Repo
@@ -550,10 +482,7 @@ Get Repo information from
  
 - Login to argocd UI
 
-You can deploy and sync each service from argoCD UI in the following this order
---RabbitMQ Operator 
---Cert Manager 
-the rest can follow in any order
+You can deploy and sync each service from argoCD UI in the following order 1-RabbitMQ Operator, 2-Cert Manager, the rest can follow in any order
  
  
 ## 5. Testing the solution.
