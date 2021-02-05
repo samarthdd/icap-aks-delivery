@@ -611,4 +611,3 @@ az ad sp delete --id $appID
 
 
 ```
-
