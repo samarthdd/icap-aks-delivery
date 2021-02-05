@@ -1,6 +1,6 @@
-#AKS-DEPLOYMENT-DOCUMENTATION
+# AKS-DEPLOYMENT-DOCUMENTATION
 
-#Instructions
+# Instructions
 
 ## 1. Pre-requisites
 - Terraform 14.4+
