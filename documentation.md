@@ -358,24 +358,24 @@ main.tf key = "test1.upwork.terraform.tfstate"
 
 - modules/clusters/aks01/variables.tf
 ```
-Change "default" field in resource_group , cluster_name
+Change "default" field in location, resource_group , cluster_name
 
 ```
 - modules/clusters/argocd-cluster/variables.tf
 ```
-Change "default" field in resource_group , cluster_name
+Change "default" field in location,resource_group , cluster_name
 
 ```
 
 - modules/clusters/keyvaults/keyvault-ukw/variables.tf
 
 ```
-Change "default" field in resource_group , kv_name
+Change "default" field in location, resource_group , kv_name
 ```
 
 - modules/clusters/storage-accounts/storage-accounts-ukw/variables.tf
 ```
-Change "default" field in resource_group_name
+Change "default" field in location, resource_group_name
 ```
 
 - scripts/az-secret-script/create-az-secret.sh
@@ -384,12 +384,14 @@ change UKW_VAULT to kv_name default value
 ```
 - scripts\k8s_scripts\create-ns-docker-secret-uks.sh
 ```
+Context used in kubectl config use-context to aks cluster
 RESOURCE_GROUP= resource group in storage-account
 VAULT_NAME= kv_name default vault
 ```
 
 - scripts\argocd-scripts\argocd-app-deloy.sh
 ```
+Context used in kubectl config use-context to argocd cluster
 UKW_RESOURCE_GROUP -  resource_group of aks
 UKW_CONTEXT - cluster_name of aks
 ```
