@@ -471,7 +471,7 @@ chmod +x ./scripts/az-secret-script/create-az-secret.sh
 ./scripts/az-secret-script/create-az-secret.sh
 ```
 
-### Creating SSL Certs
+### 3.5 Creating SSL Certs
 
 - Firstly you will need to create a ```certs/``` folder:
 
