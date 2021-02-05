@@ -12,7 +12,7 @@
 - Bash terminal or terminal able to execute bash scripts
 
 ### 1.1 Installation of Pre-requisites
-#### Terraform install
+### Terraform install
 
 **MacOS**
 
@@ -61,7 +61,7 @@
             Terraform v0.14.3
     ```
  
-#### Kubectx install
+### Kubectx install
 **MacOS**
 
 Copy and paste the following command
@@ -85,7 +85,7 @@ Copy and paste the following command
     sudo apt install kubectx
     ```
  
-#### Kubectl install
+### Kubectl install
 **MacOS**
 
 - Copy and paste the following command
@@ -186,7 +186,17 @@ Copy and paste the following command
     ```
     chmod +x /usr/local/bin/argocd
     ```
-   
+### Open SSL 
+
+**MacOs**  
+
+```
+brew info openssl
+
+#check version
+openssl version -a
+```
+
 ## 2. Usage
 
 ### 2.1 Clone Repo
