@@ -31,7 +31,7 @@
 1. Download the terraform package from portal either 32/64 bit version.
 2. Make a folder in C drive in program files if its 32 bit package you have to create folder inside on programs(x86) folder or else inside programs(64 bit) folder.
 3. Extract a downloaded file in this location or copy terraform.exe file into this folder. copy this path location like C:\Programfile\terraform\
-4. Then goto 
+4. Then goto
     ```
     
     Control Panel -> System -> System settings -> Environment Variables
