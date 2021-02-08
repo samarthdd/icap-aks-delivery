@@ -2,7 +2,7 @@
 ## Table of contents
 
 - [Pre-requisites](#pre-requisites)
-   - [Installation of Pre-requisites](#1.-installation-of-Pre-requisites)
+   - [Installation of Pre-requisites](#installation-of-Pre-requisites)
       - [Terraform Install](#Terraform-install)
       - [Kubectl install](#Kubectl-install)
       - [Open SSL](#Open-SSL)
