@@ -2,8 +2,11 @@
 ## Table of contents
 
 - [Pre-requisites](#Pre-requisites)
-   - [Installation of Pre-requisites](#Installation-of-Pre-requisites)
+   - [Installation of Pre-requisites](#1.-Installation-of-Pre-requisites)
       - [Terraform Install](#Terraform-install)
+      - [Kubectl install](#Kubectl-install)
+      - [Open SSL](#Open-SSL)
+      
 ## 1. Pre-requisites
 - Terraform 14.4+
 - Kubectl
