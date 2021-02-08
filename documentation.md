@@ -6,7 +6,7 @@
     + [Terraform install](#terraform-install)
     + [Kubectl install](#kubectl-install)
     + [Open SSL](#open-ssl)
-    + [JSON processor (jq)](#json-processor-(jq))
+    + [JSON processor (jq)](#json-processor-(-jq-))
   * [2. Usage](#2-usage)
     + [2.1 Clone Repo](#21-clone-repo)
   * [2.2 Firstly make sure you're logged in and using the correct subscription.](#22-firstly-make-sure-you-are-logged-in-and-using-the-correct-subscription)
