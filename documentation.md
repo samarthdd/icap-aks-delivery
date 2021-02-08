@@ -8,6 +8,7 @@
 - Microsoft account
 - AZ CLI - with permissions to create resources within your chosen subscription
 - Bash terminal or terminal able to execute bash scripts
+- Jq
 
 ### 1.1 Installation of Pre-requisites
 ### Terraform install
@@ -129,6 +130,25 @@ Follow the instructions [here](https://www.xolphin.com/support/OpenSSL/OpenSSL_-
 **Linux**
 
 OpenSSL has been installed from source on Linux Ubuntu and CentOS
+
+### jq
+
+**mac**
+```
+brew install jq
+
+```
+**windows**
+
+```
+chocolatey install jq
+```
+
+**Linux**
+```
+sudo apt-get install jq
+```
+
 ## 2. Usage
 
 ### 2.1 Clone Repo
@@ -283,7 +303,7 @@ az keyvault secret show --name terraform-backend-key --vault-name $VAULT_NAME --
 - Next export the environment variable "ARM_ACCESS_KEY" to be able to initialise terraform
 
 ```
-export ARM_ACCESS_KEY=$(az keyvault secret show --name terraform-backend-key --vault-name gw-tfstate-Vault --query value -o tsv)
+export ARM_ACCESS_KEY=$(az keyvault secret show --name terraform-backend-key --vault-name $VAULT_NAME --query value -o tsv)
 ```
  
 - Now check to see if you can access it through variable
