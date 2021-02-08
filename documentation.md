@@ -21,7 +21,7 @@
     + [3.3 Verify Context](#33-verify-context)
     + [3.4 Loading Secrets into key vault.](#34-loading-secrets-into-key-vault)
     + [3.5 Creating SSL Certs](#35-creating-ssl-certs)
-    + [3.6 Create Namespaces & Secrets.](#36-create-namespaces-&-secrets)
+    + [3.6 Create Namespaces & Secrets.](#36-create-namespaces-and-secrets)
     + [3.7 Deploy Using ArgoCD](#37-deploy-using-argocd)
   * [4. Sync an ArgoCD App](#4-sync-an-argocd-app)
     + [4.1 Sync From cli](#41-sync-from-cli)
@@ -471,7 +471,7 @@ mkdir certs/mgmt-cert
 ./scripts/gen-certs/mgmt-cert/mgmt-gen-certs.sh management-ui.ukwest.cloudapp.azure.com
 ```
  
-### 3.6 Create Namespaces & Secrets.
+### 3.6 Create Namespaces and Secrets.
 ```
 chmod +x ./scripts/k8s_scripts/create-ns-docker-secret-uks.sh
  
