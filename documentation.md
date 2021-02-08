@@ -178,7 +178,7 @@ git submodule update
 
 ```
    
-## 2.2 Firstly make sure you're logged in and using the correct subscription.
+### 2.2 Firstly make sure you're logged in and using the correct subscription.
 
 ```bash
 
