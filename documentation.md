@@ -2,7 +2,7 @@
 ## Table of contents
 
 - [Pre-requisites](#1.Pre-requisites)
-   - [Installation of Pre-requisites)[#Installation-of-Pre-requisites)
+   - [Installation of Pre-requisites)[#1.-Installation-of-Pre-requisites)
       - [Terraform Install](#Terraform-install)
 ## 1. Pre-requisites
 - Terraform 14.4+
