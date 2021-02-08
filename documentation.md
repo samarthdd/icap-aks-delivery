@@ -9,7 +9,7 @@
     + [JSON processor (jq)](#json-processor-(jq)-)
   * [2. Usage](#2-usage)
     + [2.1 Clone Repo](#21-clone-repo)
-  * [2.2 Firstly make sure you're logged in and using the correct subscription.](#22-firstly-make-sure-you--re-logged-in-and-using-the-correct-subscription)
+  * [2.2 Firstly make sure you're logged in and using the correct subscription.](#22-firstly-make-sure-you-are-logged-in-and-using-the-correct-subscription)
     + [2.3 Create azure initial setup](#23-create-azure-initial-setup)
     + [2.4 Create terraform service principle](#24-create-terraform-service-principle)
     + [2.5 Add Secrets to main KeyVault](#25-add-secrets-to-main-keyvault)
@@ -193,7 +193,7 @@ git submodule update
 
 ```
    
-## 2.2 Firstly make sure you're logged in and using the correct subscription.
+### 2.2 Firstly make sure you are logged in and using the correct subscription.
 
 ```bash
 
@@ -488,7 +488,7 @@ mkdir certs/mgmt-cert
 ./scripts/gen-certs/mgmt-cert/mgmt-gen-certs.sh management-ui.ukwest.cloudapp.azure.com
 ```
  
-### 3.6 Create Namespaces & Secrets.
+### 3.6 Create Namespaces and Secrets.
 ```
 chmod +x ./scripts/k8s_scripts/create-ns-docker-secret-uks.sh
  
@@ -604,3 +604,4 @@ az ad sp delete --id $appID
 
 
 ```
+[Go to top](#instructions)
