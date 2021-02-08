@@ -1,7 +1,7 @@
 # Instructions
 ## Table of contents
 
-- [Pre-requisites](#1.Usage)
+- [Pre-requisites](#Usage)
    - [Installation of Pre-requisites)[#1.Installation-of-Pre-requisites)
       - [Terraform Install](#Terraform-install)
 ## 1. Pre-requisites
