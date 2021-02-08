@@ -9,7 +9,7 @@
     + [Open SSL](#open-ssl)
   * [2. Usage](#2-usage)
     + [2.1 Clone Repo](#21-clone-repo)
-  * [2.2 Firstly make sure you're logged in and using the correct subscription.](#22-firstly-make-sure-you're-logged-in-and-using-the-correct-subscription)
+  * [2.2 Firstly make sure you're logged in and using the correct subscription.](#22-firstly-make-sure-you-'-re-logged-in-and-using-the-correct-subscription)
     + [2.3 Create azure initial setup](#23-create-azure-initial-setup)
     + [2.4 Create terraform service principle](#24-create-terraform-service-principle)
     + [2.5 Add Secrets to main KeyVault](#25-add-secrets-to-main-keyvault)
@@ -30,11 +30,7 @@
     + [5.1 Healthcheck](#51-healthcheck)
     + [5.2 Testing rebuild](#52-testing-rebuild)
     + [6 Uninstall AKS-Solution.](#6-uninstall-aks-solution)
-
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
-
-      
+ 
 ## 1. Pre-requisites
 - Terraform 14.4+
 - Kubectl
