@@ -1,11 +1,41 @@
 # Instructions
 ## Table of contents
+- [Instructions](#instructions)
+  * [Table of contents](#table-of-contents)
+  * [1. Pre-requisites](#1-pre-requisites)
+    + [1.1 Installation of Pre-requisites](#11-installation-of-pre-requisites)
+    + [Terraform install](#terraform-install)
+    + [Kubectl install](#kubectl-install)
+    + [Open SSL](#open-ssl)
+  * [2. Usage](#2-usage)
+    + [2.1 Clone Repo](#21-clone-repo)
+  * [2.2 Firstly make sure you're logged in and using the correct subscription.](#22-firstly-make-sure-you-re-logged-in-and-using-the-correct-subscription)
+    + [2.3 Create azure initial setup](#23-create-azure-initial-setup)
+    + [2.4 Create terraform service principle](#24-create-terraform-service-principle)
+    + [2.5 Add Secrets to main KeyVault](#25-add-secrets-to-main-keyvault)
+    + [2.6 Add Terraform Backend Key to Environment](#26-add-terraform-backend-key-to-environment)
+    + [2.7 File Modifications](#27-file-modifications)
+  * [3. Deployment](#3-deployment)
+    + [3.1 Setup and Initialise Terraform](#31-setup-and-initialise-terraform)
+    + [3.2 Guide to Setup ArgoCD](#32-guide-to-setup-argocd)
+    + [3.3 Verify Context](#33-verify-context)
+    + [3.4 Loading Secrets into key vault.](#34-loading-secrets-into-key-vault)
+    + [3.5 Creating SSL Certs](#35-creating-ssl-certs)
+    + [3.6 Create Namespaces & Secrets.](#36-create-namespaces---secrets)
+    + [3.7 Deploy Using ArgoCD](#37-deploy-using-argocd)
+  * [4. Sync an ArgoCD App](#4-sync-an-argocd-app)
+    + [4.1 Sync From cli](#41-sync-from-cli)
+    + [Sync each Repo using command](#sync-each-repo-using-command)
+    + [4.2 Sync From UI](#42-sync-from-ui)
+  * [5. Testing the solution.](#5-testing-the-solution)
+    + [5.1 Healthcheck](#51-healthcheck)
+    + [5.2 Testing rebuild](#52-testing-rebuild)
+    + [6 Uninstall AKS-Solution.](#6-uninstall-aks-solution)
+      - [**Only if you want to uninstall AKS solution completely from your system, then proceed**](#--only-if-you-want-to-uninstall-aks-solution-completely-from-your-system--then-proceed--)
 
-- [Pre-requisites](#pre-requisites)
-   - [Installation of Pre-requisites](#installation-of-pre-requisites)
-      - [Terraform Install](#Terraform-install)
-      - [Kubectl install](#Kubectl-install)
-      - [Open SSL](#Open-SSL)
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
       
 ## 1. Pre-requisites
 - Terraform 14.4+
