@@ -4,11 +4,12 @@
 - Terraform 14.4+
 - Kubectl
 - Argocd
+- Helm
 - Openssl
 - Microsoft account
-- AZ CLI - with permissions to create resources within your chosen subscription
+- Azure CLI - with permissions to create resources and service principle within your chosen subscription
 - Bash terminal or terminal able to execute bash scripts
-- Jq
+- JSON processor (jq)
 
 ### 1.1 Installation of Pre-requisites
 ### Terraform install
@@ -131,7 +132,7 @@ Follow the instructions [here](https://www.xolphin.com/support/OpenSSL/OpenSSL_-
 
 OpenSSL has been installed from source on Linux Ubuntu and CentOS
 
-### jq
+### JSON processor (jq)
 
 **mac**
 ```
