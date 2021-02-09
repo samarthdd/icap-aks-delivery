@@ -391,15 +391,7 @@ Enter a value:
 Enter "yes"
 
 ```
-### 3.2 Guide to Setup ArgoCD
-
-Next we will deploy the services using either Helm or Argocd. Both of the Readme's for each can be found below:
-
-- [ArgoCD Installation guide Readme](/argocd/installation-guide/README.md)
-- [ArgoCD deployment guide Readme](/argocd/deployment-guide/README.md)
-- [ArgoCD user guide Readme](/argocd/user-guide/README.md)
-
-### 3.3 Switch Context 
+### 3.2 Switch Context 
 
 ```
 chmod +x ./scripts/get-kube-context/get-kube-context-sh
@@ -410,6 +402,14 @@ chmod +x ./scripts/get-kube-context/get-kube-context-sh
 ```
 ./scripts/get-kube-context/get-kube-context-sh
 ```
+
+### 3.3 Guide to Setup ArgoCD
+
+Next we will deploy the services using either Helm or Argocd. Both of the Readme's for each can be found below:
+
+- [ArgoCD Installation guide Readme](/argocd/installation-guide/README.md)
+- [ArgoCD deployment guide Readme](/argocd/deployment-guide/README.md)
+- [ArgoCD user guide Readme](/argocd/user-guide/README.md)
 
 ### 3.4 Loading Secrets into key vault.
 
