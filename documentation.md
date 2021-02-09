@@ -470,15 +470,29 @@ chmod +x ./scripts/argocd-scripts/argocd-app-deloy.sh
 ### 4.1 Sync From cli
 Get Repo information from
  ```
-    	#!/bin/sh
-        #list of apps
-        app_list=$(argocd app list --output name)
-        
-        for item in $app_list
-        do
-          echo $item
-          argocd app sync $item
-        done
+#!/bin/sh
+
+# App Name
+ADAPTATION_SERVICE="icap-adaptation-service"
+ADMINISTRATION_SERVICE="icap-administration-service"
+NCFS_SERVICE="icap-ncfs-service"
+RABBITMQ_OPERATOR="rabbitmq-operator"
+MONITORING_SERVICE="monitoring"
+CERT_MANAGER="cert-manager"
+
+argocd app sync $RABBITMQ_OPERATOR-ukw-develop
+
+argocd app sync $CERT_MANAGER-ukw-develop
+
+#list of apps
+app_list=$(argocd app list --output name)
+
+for item in $app_list
+do
+  echo $item
+  argocd app sync $item
+done
+
 ```
 ### 4.2 Sync From UI
 - Access argocd UI using argocd public
@@ -555,6 +569,5 @@ az group delete -n $RESOURCE_GROUP_NAME
 
 #deletes service priniple
 az ad sp delete --id $appID
-
 
 ```
