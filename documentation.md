@@ -518,6 +518,8 @@ You can deploy and sync each service from argoCD UI in the following order 1-Rab
 - Run below command
 
 ```
+curl https://owasp.org/www-pdf-archive//01_18_10_OWASP_Newsletter.pdf --output sample.pdf
+
 /usr/bin/c-icap-client -i <IP>  -p 1344 -tls -tls-no-verify -s gw_rebuild -f sample.pdf -o rebuilt.pdf -v
 
 ```
