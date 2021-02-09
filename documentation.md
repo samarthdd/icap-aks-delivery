@@ -1,4 +1,36 @@
 # Instructions
+## Table of contents
+
+- [Instructions](#instructions)
+  * [1. Pre-requisites](#1-pre-requisites)
+    + [1.1 Installation of Pre-requisites](#11-installation-of-pre-requisites)
+    + [Terraform install](#terraform-install)
+    + [Kubectl install](#kubectl-install)
+    + [Open SSL](#open-ssl)
+    + [JSON processor (jq)](#json-processor)
+  * [2. Usage](#2-usage)
+    + [2.1 Clone Repo](#21-clone-repo)
+    + [2.2 Firstly make sure you are logged in and using the correct subscription.](#22-firstly-make-sure-you-are-logged-in-and-using-the-correct-subscription)
+    + [2.3 Create azure initial setup](#23-create-azure-initial-setup)
+    + [2.4 Create terraform service principle](#24-create-terraform-service-principle)
+    + [2.5 Add Secrets to main KeyVault](#25-add-secrets-to-main-keyvault)
+    + [2.6 Add Terraform Backend Key to Environment](#26-add-terraform-backend-key-to-environment)
+    + [2.7 File Modifications](#27-file-modifications)
+  * [3. Deployment](#3-deployment)
+    + [3.1 Setup and Initialise Terraform](#31-setup-and-initialise-terraform)
+    + [3.2 Switch Context](#32-switch-context)
+    + [3.3 Loading Secrets into key vault.](#33-loading-secrets-into-key-vault)
+    + [3.4 Creating SSL Certs](#34-creating-ssl-certs)
+    + [3.5 Create Namespaces and Secrets.](#35-create-namespaces-and-secrets)
+    + [3.6 Guide to Setup ArgoCD](#36-guide-to-setup-argocd)
+    + [3.7 Deploy Using ArgoCD](#37-deploy-using-argocd)
+  * [4. Sync an ArgoCD App](#4-sync-an-argocd-app)
+    + [4.1 Sync From CLI](#41-sync-from-cli)
+    + [4.2 Sync From UI](#42-sync-from-ui)
+  * [5. Testing the solution.](#5-testing-the-solution)
+    + [5.1 Healthcheck](#51-healthcheck)
+    + [5.2 Testing rebuild](#52-testing-rebuild)
+    + [6 Uninstall AKS-Solution.](#6-uninstall-aks-solution)
 
 ## 1. Pre-requisites
 - Terraform 14.4+
@@ -132,14 +164,14 @@ Follow the instructions [here](https://www.xolphin.com/support/OpenSSL/OpenSSL_-
 
 OpenSSL has been installed from source on Linux Ubuntu and CentOS
 
-### JSON processor (jq)
+### JSON processor
 
-**mac**
+**MacOS**
 ```
 brew install jq
 
 ```
-**windows**
+**Windows**
 
 ```
 chocolatey install jq
@@ -162,7 +194,7 @@ git submodule update
 
 ```
    
-## 2.2 Firstly make sure you're logged in and using the correct subscription.
+### 2.2 Firstly make sure you are logged in and using the correct subscription.
 
 ```bash
 
@@ -176,7 +208,7 @@ az account set -s <subscription ID>
 
 ### 2.3 Create azure initial setup
 
-- Give any meaningfull vaule to below varibles and run it in terminal
+- Give any meaningfull vaule to below variables and run it in terminal
 ```
     export LOCATION=uksouth
     export RESOURCE_GROUP_NAME=gw-icap-tfstate
@@ -234,7 +266,7 @@ This next part will create a service principle, with the least amount of privile
 
 - When prompted `The provider.tf file exists.  Do you want to overwrite? ` , Enter `Y`
 
-- The output will be similar to this. Note down <client id> and <client secret>
+- The output will be similar to this. Keep a copy of `client id` and `client secret`
 
 ```
 {
@@ -274,7 +306,7 @@ SmtpPass             =    < smtp pass >
 manage-endpoint      =
 ```
 - Run below commands with proper values to save secrets in keyVault
-( You can also do this in Azure portal.Login to azure account and  search <KEY_VAULT_NAME>,Go to secrets and add the above secrets. )
+( You can also do this in Azure portal.Login to azure account and search <KEY_VAULT_NAME>,Go to secrets and add the above secrets. )
 
 ```
 az keyvault secret set --vault-name $VAULT_NAME  --name "token-username" --value <token-username>
@@ -402,7 +434,7 @@ Enter "yes"
 chmod +x ./scripts/get-kube-context/get-kube-context-sh
 ```
 
-- The  run:
+- Then  run:
 
 ```
 ./scripts/get-kube-context/get-kube-context-sh
@@ -443,7 +475,7 @@ mkdir certs/mgmt-cert
 ./scripts/gen-certs/mgmt-cert/mgmt-gen-certs.sh management-ui.ukwest.cloudapp.azure.com
 ```
  
-### 3.5 Create Namespaces & Secrets.
+### 3.5 Create Namespaces and Secrets.
 ```
 chmod +x ./scripts/k8s_scripts/create-ns-docker-secret-uks.sh
  
@@ -477,7 +509,7 @@ chmod +x ./scripts/argocd-scripts/argocd-app-deloy.sh
 ```
  
 ## 4. Sync an ArgoCD App
-### 4.1 Sync From cli
+### 4.1 Sync From CLI
 Get Repo information from
  ```
 #!/bin/sh
@@ -519,7 +551,7 @@ You can deploy and sync each service from argoCD UI in the following order 1-Rab
 
 ### 5.1 Healthcheck
 
-- Make sure all the applications are healty and synced from argocd UI
+- Make sure all the applications are healthy and synced from argocd UI
 
 ### 5.2 Testing rebuild 
 
@@ -583,3 +615,4 @@ az group delete -n $RESOURCE_GROUP_NAME
 az ad sp delete --id $appID
 
 ```
+[Go to top](#instructions)
