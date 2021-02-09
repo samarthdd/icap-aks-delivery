@@ -220,11 +220,6 @@ az account set -s <subscription ID>
 
 ```
 
-- Get account_key value and run below
-```
-    export ACCOUNT_KEY=<account_key>
-
-```
 ### 2.4 Create terraform service principle
 
 **PLEASE NOTE THIS ONLY NEEDS TO BE DONE ONCE FOR A SINGLE SUBSCRIPTION**
@@ -269,8 +264,8 @@ TF-VAR-client-id     =    < client id >
 TF-VAR-client-secret =    < client secret >
 DH-SA-USERNAME       =    < dockerhub username >
 DH-SA-PASSWORD       =    < dockerhub password  >
-SmtpUser             =    
-SmtpPass             =
+SmtpUser             =    < smtup user >
+SmtpPass             =    < smtp pass >
 manage-endpoint      =
 ```
 - Run below commands with proper values to save secrets in keyVault
@@ -287,15 +282,15 @@ az keyvault secret set --vault-name $VAULT_NAME --name "TF-VAR-client-id" --valu
 
 az keyvault secret set --vault-name $VAULT_NAME  --name "TF-VAR-client-secret" --value <CLIENT_SECRET>
 
-az keyvault secret set --vault-name $VAULT_NAME  --name DH-SA-USERNAME--value <CLIENT_SECRET>
+az keyvault secret set --vault-name $VAULT_NAME  --name DH-SA-USERNAME--value <dockerhub username>
 
-az keyvault secret set --vault-name $VAULT_NAME  --name DH-SA-PASSWORD --value <CLIENT_SECRET>
+az keyvault secret set --vault-name $VAULT_NAME  --name DH-SA-PASSWORD --value <dockerhub password>
 
-az keyvault secret set --vault-name $VAULT_NAME  --name SmtpUser --value <CLIENT_SECRET>
+az keyvault secret set --vault-name $VAULT_NAME  --name SmtpUser --value <smtup user>
 
-az keyvault secret set --vault-name $VAULT_NAME  --name SmtpPass --value <CLIENT_SECRET>
+az keyvault secret set --vault-name $VAULT_NAME  --name SmtpPass --value <smtp pass>
 
-az keyvault secret set --vault-name $VAULT_NAME  --name manage-endpoint --value <CLIENT_SECRET>
+az keyvault secret set --vault-name $VAULT_NAME  --name manage-endpoint --value <manage-endpoint>
 
 ```
 
@@ -398,32 +393,16 @@ Next we will deploy the services using either Helm or Argocd. Both of the Readme
 - [ArgoCD deployment guide Readme](/argocd/deployment-guide/README.md)
 - [ArgoCD user guide Readme](/argocd/user-guide/README.md)
 
-### 3.3 Verify Context 
+### 3.3 Switch Context 
 
-- Check you are in newly created cluster
 ```
-kubectl config get-contexts
+chmod +x ./scripts/get-kube-context/get-kube-context-sh
 ```
-- if new cluster is not highlighted, switch to your cluster using
-```
-kubectl config use-context <cluster_name>
-```
- 
-- Now you have the cluster added you can get the cluster server address using the below command:
-```
-kubectl cluster-info
 
-Kubernetes master is running at https://gw-icap-k8s-f17703a9.hcp.uksouth.azmk8s.io:443
-CoreDNS is running at https://gw-icap-k8s-f17703a9.hcp.uksouth.azmk8s.io:443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
-Metrics-server is running at https://gw-icap-k8s-f17703a9.hcp.uksouth.azmk8s.io:443/api/v1/namespaces/kube-system/services/https:metrics-server:/proxy
- ```
-- To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
-- if you want to check the status of an ArgoCD app you would use the following:
+- The  run:
+
 ```
-argocd app list
-
-#it should be empty at this point before deployment
-
+./scripts/get-kube-context/get-kube-context-sh
 ```
 
 ### 3.4 Loading Secrets into key vault.
@@ -490,13 +469,16 @@ chmod +x ./scripts/argocd-scripts/argocd-app-deloy.sh
 ## 4. Sync an ArgoCD App
 ### 4.1 Sync From cli
 Get Repo information from
-    	```
-    	argocd app list
-    	```
- 
-### Sync each Repo using command
-```
-    	argocd app sync <REPO>
+ ```
+    	#!/bin/sh
+        #list of apps
+        app_list=$(argocd app list --output name)
+        
+        for item in $app_list
+        do
+          echo $item
+          argocd app sync $item
+        done
 ```
 ### 4.2 Sync From UI
 - Access argocd UI using argocd public
@@ -508,7 +490,6 @@ Get Repo information from
 - Login to argocd UI
 
 You can deploy and sync each service from argoCD UI in the following order 1-RabbitMQ Operator, 2-Cert Manager, the rest can follow in any order
- 
  
 ## 5. Testing the solution.
 
