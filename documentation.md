@@ -242,6 +242,7 @@ This next part will create a service principle, with the least amount of privile
 
 - The output will be similar to this. Note down <client id> and <client secret>
 
+```
 {
   "appId": "xyz",
   "displayName": "xyz",
@@ -254,10 +255,13 @@ client_id       = "xyz"
 client_secret   = "xyz"
 tenant_id       = "xyz"
 
+```
+
 ### 2.5 Add Secrets to main KeyVault
 
 - Get vaule for below varibles
 
+```
 token-username       =    "policy-management"
 spusername           =    < client id >
 sppassword           =    < client secret >
@@ -268,7 +272,7 @@ DH-SA-PASSWORD       =    < dockerhub password  >
 SmtpUser             =    
 SmtpPass             =
 manage-endpoint      =
-
+```
 - Run below commands with proper values to save secrets in keyVault
 ( You can also do this in Azure portal.Login to azure account and  search <KEY_VAULT_NAME>,Go to secrets and add the above secrets. )
 
