@@ -186,7 +186,6 @@ az account set -s <subscription ID>
     export VAULT_NAME=gw-tfstate-Vault
 
 ```
-
 - Run below script
 
 ```
@@ -320,8 +319,14 @@ echo $ARM_ACCESS_KEY
 
 - Currently below needs modifications
 
+- main.tf
 ```
-main.tf key = "test1.upwork.terraform.tfstate"
+resource_group_name  = "gw-icap-tfstate"
+storage_account_name = "tfstate263sam"
+container_name       = "gw-icap-tfstate"
+key = "test1.upwork.terraform.tfstate"
+
+Note : First 3 values should be same as export values in step 2.3 
 ```
 
 - modules/clusters/aks01/variables.tf
