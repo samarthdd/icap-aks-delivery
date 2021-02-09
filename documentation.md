@@ -252,6 +252,12 @@ tenant_id       = "xyz"
 
 ```
 
+- Run 
+
+```
+export appId=<APP ID>
+```
+
 ### 2.5 Add Secrets to main KeyVault
 
 - Get vaule for below varibles
