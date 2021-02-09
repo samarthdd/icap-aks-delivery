@@ -20,7 +20,7 @@
     + [3.1 Setup and Initialise Terraform](#31-setup-and-initialise-terraform)
     + [3.2 Switch Context](#32-switch-context)
     + [3.3 Loading Secrets into key vault.](#33-loading-secrets-into-key-vault)
-    + [3.4 Creating SSL Certs](#34-creating-fffssl-certs)
+    + [3.4 Creating SSL Certs](#34-creating-ssl-certs)
     + [3.5 Create Namespaces and Secrets.](#35-create-namespaces-and-secrets)
     + [3.6 Guide to Setup ArgoCD](#36-guide-to-setup-argocd)
     + [3.7 Deploy Using ArgoCD](#37-deploy-using-argocd)
