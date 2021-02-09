@@ -178,6 +178,9 @@ You will use Helm to install ArgoCD, follow the commands below to get it install
 Firstly make sure you're using the correct context, this will be the context of the cluster you want to deploy to:
 
 ```bash
+
+kubectl config get-contexts
+
 kubectl config use-context <name of cluster>
 ```
 
