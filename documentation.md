@@ -176,14 +176,14 @@ az account set -s <subscription ID>
 
 ### 2.3 Create azure initial setup
 
-- Give a any meaningfull vaule to below varibles and run it in terminal
+- Give any meaningfull vaule to below varibles and run it in terminal
 ```
     export LOCATION=uksouth
-    export RESOURCE_GROUP_NAME=
-    export STORAGE_ACCOUNT_NAME=
-    export CONTAINER_NAME=
+    export RESOURCE_GROUP_NAME=gw-icap-tfstate
+    export STORAGE_ACCOUNT_NAME=tfstate263
+    export CONTAINER_NAME=gw-icap-tfstate
     export TAGS='createdby='
-    export VAULT_NAME=
+    export VAULT_NAME=gw-tfstate-Vault
 
 ```
 
@@ -260,7 +260,7 @@ export appId=<APP ID>
 
 ### 2.5 Add Secrets to main KeyVault
 
-- Get vaule for below varibles
+- Get value for below variables
 
 ```
 token-username       =    "policy-management"
@@ -403,15 +403,7 @@ chmod +x ./scripts/get-kube-context/get-kube-context-sh
 ./scripts/get-kube-context/get-kube-context-sh
 ```
 
-### 3.3 Guide to Setup ArgoCD
-
-Next we will deploy the services using either Helm or Argocd. Both of the Readme's for each can be found below:
-
-- [ArgoCD Installation guide Readme](/argocd/installation-guide/README.md)
-- [ArgoCD deployment guide Readme](/argocd/deployment-guide/README.md)
-- [ArgoCD user guide Readme](/argocd/user-guide/README.md)
-
-### 3.4 Loading Secrets into key vault.
+### 3.3 Loading Secrets into key vault.
 
 - First we need to make file executable by running
 
@@ -423,7 +415,7 @@ chmod +x ./scripts/az-secret-script/create-az-secret.sh
 ./scripts/az-secret-script/create-az-secret.sh
 ```
 
-### 3.5 Creating SSL Certs
+### 3.4 Creating SSL Certs
 
 - Firstly you will need to create a ```certs/``` folder:
 
@@ -446,13 +438,20 @@ mkdir certs/mgmt-cert
 ./scripts/gen-certs/mgmt-cert/mgmt-gen-certs.sh management-ui.ukwest.cloudapp.azure.com
 ```
  
-### 3.6 Create Namespaces & Secrets.
+### 3.5 Create Namespaces & Secrets.
 ```
 chmod +x ./scripts/k8s_scripts/create-ns-docker-secret-uks.sh
  
 ./scripts/k8s_scripts/create-ns-docker-secret-uks.sh
 
 ```
+### 3.6 Guide to Setup ArgoCD
+
+Next we will deploy the services using either Helm or Argocd. Both of the Readme's for each can be found below:
+
+- [ArgoCD Installation guide Readme](/argocd/installation-guide/README.md)
+- [ArgoCD deployment guide Readme](/argocd/deployment-guide/README.md)
+- [ArgoCD user guide Readme](/argocd/user-guide/README.md)
 
 ### 3.7 Deploy Using ArgoCD
 
