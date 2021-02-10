@@ -226,10 +226,7 @@ az account set -s <subscription ID>
 This next part will create a service principle, with the least amount of privileges, to perform the AKS Deployment.
 
 ```
-
- chmod +x ./scripts/terraform-scripts/createTerraormServicePrinciple.sh
 ./scripts/terraform-scripts/createTerraormServicePrinciple.sh
-
 ```
 
 - When prompted `The provider.tf file exists.  Do you want to overwrite? ` , Enter `Y`
@@ -398,11 +395,7 @@ Enter "yes"
 ```
 ### 3.2 Switch Context 
 
-```
-chmod +x ./scripts/get-kube-context/get-kube-context-sh
-```
-
-- The  run:
+-Run:
 
 ```
 ./scripts/get-kube-context/get-kube-context-sh
@@ -410,12 +403,7 @@ chmod +x ./scripts/get-kube-context/get-kube-context-sh
 
 ### 3.3 Loading Secrets into key vault.
 
-- First we need to make file executable by running
-
-```
-chmod +x ./scripts/az-secret-script/create-az-secret.sh
-```
-- Then run the following
+- Run
 ```
 ./scripts/az-secret-script/create-az-secret.sh
 ```
@@ -444,9 +432,7 @@ mkdir certs/mgmt-cert
 ```
  
 ### 3.5 Create Namespaces & Secrets.
-```
-chmod +x ./scripts/k8s_scripts/create-ns-docker-secret-uks.sh
- 
+``` 
 ./scripts/k8s_scripts/create-ns-docker-secret-uks.sh
 
 ```
@@ -472,7 +458,6 @@ argocd context <name of the server>
 ```
 - Deploy ArgoCD
 ```
-chmod +x ./scripts/argocd-scripts/argocd-app-deloy.sh
 ./scripts/argocd-scripts/argocd-app-deloy.sh
 ```
  
@@ -523,36 +508,32 @@ You can deploy and sync each service from argoCD UI in the following order 1-Rab
 
 ### 5.2 Testing rebuild 
 
-- Download C-ICAP (https://zoomadmin.com/HowToInstall/UbuntuPackage/c-icap)
+Run ICAP client locally 
 
-- Run below command
+1. Open local terminal window 
+2. Run:
 
-```
-curl https://owasp.org/www-pdf-archive//01_18_10_OWASP_Newsletter.pdf --output sample.pdf
+        git clone https://github.com/k8-proxy/icap-client-docker.git
+    
+3. Run: 
 
-/usr/bin/c-icap-client -i <IP>  -p 1344 -tls -tls-no-verify -s gw_rebuild -f sample.pdf -o rebuilt.pdf -v
+        cd icap-client-docker/
+        sudo docker build -t c-icap-client .
+    
+4. Run: 
+       
+        ./icap-client.sh {IP of frontend-icap-lb} JS_Siemens.pdf
+        
+        (check Respond Headers: HTTP/1.0 200 OK to verify rebuild is successful)
+    
+5. Run: 
 
-```
-
-- The output should be similar to this
-
-```
-ICAP HEADERS:
-	ICAP/1.0 200 OK
-	Server: C-ICAP/0.5.7
-	Connection: keep-alive
-	ISTag: CI0001-2.1.1
-	Encapsulated: res-hdr=0, res-body=263
-
-RESPMOD HEADERS:
-	HTTP/1.0 200 OK
-	Date: Fri Feb  5 09:55:38 2021
-	Last-Modified: Fri Feb  5 09:55:38 2021
-	Content-Length: 611191
-	X-Adaptation-File-Id: 
-	Via: ICAP/1.0 icap-service-76b96ff545-vf9ht (C-ICAP/0.5.7 Glasswall Rebuild service )
-
-```
+        open rebuilt/rebuilt-file.pdf  
+    
+       (and notice "Glasswall Proccessed" watermark on the right hand side of the page)
+    
+6. Open original `./JS_Siemens.pdf` file in Adobe reader and notice the Javascript and the embedded file 
+7. Open `https://file-drop.co.uk/` or `https://glasswall-desktop.com/` and drop both files (`./JS_Siemens.pdf ( original )` and `rebuilt/rebuilt-file.pdf (rebuilt) `) and compare the differences
 
 ### 6 Uninstall AKS-Solution. 
 
