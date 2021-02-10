@@ -463,7 +463,7 @@ mkdir certs/mgmt-cert
 ./scripts/gen-certs/mgmt-cert/mgmt-gen-certs.sh management-ui.ukwest.cloudapp.azure.com
 ```
 ### 3.5 Create Namespaces & Secrets.
-
+```
 ./scripts/k8s_scripts/create-ns-docker-secret-uks.sh
 
 ```
@@ -495,7 +495,7 @@ argocd context <name of the server>
 ## 4. Sync an ArgoCD App
 ### 4.1 Sync From CLI
 Get Repo information from
- ```
+```
 #!/bin/sh
 
 # App Name
